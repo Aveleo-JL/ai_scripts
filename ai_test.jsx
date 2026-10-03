@@ -4,41 +4,33 @@ if (documents.length == 0) {
 else {
     var loDoc = app.activeDocument;
 
-    // var laLayers = loDoc.layers;
-    //var laSubLayers = loDoc.sublayers;
-
     lcPath = loDoc.path.toString();
     lcName = loDoc.name.split('.')[0].toString();
     lcRoot = lcPath.substring(1, 2) + ":/" + lcPath.substring(3, lcPath.length - 6);
 
-    //for (var i = 0; i < laLayers.length; i++) {
-    //    $.writeln("Layer Name: " + laLayers[i].name);
-    // }
-
     var  loLayers = [];
-    CollectAllLayers(loDoc, 0);
+    CollectPassedLayers(loDoc, 0);
+
 
     for (var i = 0; i < loLayers.length; i++) {
-        $.writeln("All Layer Name: " + loLayers[i]);
+        // $.writeln("Passed Layer ID: " + "'" + loLayers[i] + "'" + " Name: " + "'" + loDoc.layers[loLayers[i]].name + "'");
+        $.writeln("Passed Layer ID: " + "'" + loLayers[i] + "'");
+        //loDoc.layers[loLayers[i]].visible = false;
+        
     }
 
 }    
 
-function CollectAllLayers(parent, level) {
+
+function CollectPassedLayers(parent, level) {
     for (var i = 0; i < parent.layers.length; i++) {
         var layer = parent.layers[i];
-        
-        // Indent based on nesting level for readability
-        var indent = "";
-        for (var j = 0; j < level; j++) {
-            indent += "SUB - ";
+        if (level > 0) {
+            loLayers.push(layer.name);
         }
-        
-        loLayers.push(indent + layer.name);
-        
-        // If the layer has nested layers, call the function again
-        if (layer.layers.length > 0) {
-            CollectAllLayers(layer, level + 1);
+        if (layer.name == "passed") {
+            CollectPassedLayers(layer, level + 1);
         }
+
     }
 }
