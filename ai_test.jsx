@@ -27,8 +27,10 @@ function CollectPassedLayers(parent, level) {
         var layer = parent.layers[i];
         if (level > 0) {
             loLayers.push(layer.name);
+            layer.visible = false;
         }
         if (layer.name == "passed") {
+            layer.visible = true;
             CollectPassedLayers(layer, level + 1);
         }
 
