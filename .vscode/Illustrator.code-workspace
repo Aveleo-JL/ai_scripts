@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "type": "extendscript-debug",
+                "request": "launch",
+                "hostAppSpecifier": "photoshop-200.064",
+                "engineName": "main",
+                "name": "Launch Main - Illustrator 2026"
+            }
+		]
+	}		
+}
