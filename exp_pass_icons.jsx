@@ -6,32 +6,33 @@ else {
     var  loLayers = [];
     lcPath = loDoc.path.toString() + "/icons";
 
-    UnvisiblePassedLayers(loDoc, 0);
-    ExportPassedLayers(loDoc, 0);
+    UnvisibleLayers(loDoc, 0);
+    ExportIcons(loDoc, 0);
 }    
 
 
-function UnvisiblePassedLayers(parent, level) {
+function UnvisibleLayers(parent, level) {
     for (var i = 0; i < parent.layers.length; i++) {
         var layer = parent.layers[i];
+        // upravit aby sa zneviditelnili vsetky okrem base a rooto export
         if (level > 0) {
             loLayers.push(layer.name);
             layer.visible = false;
         }
-        if (layer.name == "passed") {
+        if (layer.name == "export") {
             layer.visible = true;
-            UnvisiblePassedLayers(layer, level + 1);
+            UnvisibleLayers(layer, level + 1);
         }
     }
 }
 
-function ExportPassedLayers(parent, level) {
+function ExportIcons(parent, level) {
     for (var i = 0; i < parent.layers.length; i++) {
         var layer = parent.layers[i];
         if (level > 0) {
             layer.visible = true;
             lcName = layer.name;
-            if (lcName == "backround off") {
+            if (lcName == "backround off" || lcName == "adobe illustrator") {
                 var targetLayer = activeDocument.layers.getByName("light");
                 targetLayer.visible = false;
             }
@@ -40,12 +41,14 @@ function ExportPassedLayers(parent, level) {
             var loOptions = new ExportOptionsJPEG();
             loOptions.qualitySetting = 100;
             loDoc.exportFile(loFile, ExportType.JPEG, loOptions);
+            var loRenFile = new File(lcPath + "/" + lcName.replace(/\s+/g, '-') + ".jpg");
+            loRenFile.rename(lcName + '.jpg');
             layer.visible = false;
             var targetLayer = activeDocument.layers.getByName("light");
             targetLayer.visible = true;
         }
-        if (layer.name == "passed") {
-            ExportPassedLayers(layer, level + 1);
+        if (layer.name == "export") {
+            ExportIcons(layer, level + 1);
         }
     }
 }
